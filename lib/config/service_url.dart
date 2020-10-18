@@ -1,4 +1,2 @@
 const serviceUrl = '';
-const servicePath={
-  "homePageContent":serviceUrl+"/homecontent"
-}
+const servicePath = {"homePageContent": serviceUrl + "/homecontent"};
