@@ -16,3 +16,20 @@ Future getHomePageContent() async {
     return print("Error=====${e}");
   }
 }
+
+Future getHotPageContent() async {
+  try {
+    Response response;
+    Dio dio = new Dio();
+    var formatData = {};
+    response = await dio.post(servicePath["/wxmini/homePageBelowConten"],
+        data: formatData);
+    if (response.statusCode == 200) {
+      return response.data;
+    } else {
+      throw Exception("后端端口异常");
+    }
+  } catch (e) {
+    return print("Error=====${e}");
+  }
+}
