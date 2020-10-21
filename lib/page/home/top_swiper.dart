@@ -3,7 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
 class SwiperDiy extends StatefulWidget {
-  SwiperDiy({Key key}) : super(key: key);
+  final List<Map> list;
+  SwiperDiy({this.list});
 
   @override
   _SwiperDiyState createState() => _SwiperDiyState();

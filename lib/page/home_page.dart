@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_shop/page/home/ab_banner.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:flutter_shop/page/home/floor_list.dart';
+import 'package:flutter_shop/page/home/floor_title.dart';
+import 'package:flutter_shop/page/home/hot_good.dart';
+import 'package:flutter_shop/page/home/lead_phone.dart';
+import 'package:flutter_shop/page/home/recomand.dart';
+import 'package:flutter_shop/service/service_method.dart';
 
-import 'home/top_navigator.dart';
 import 'home/top_swiper.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,46 +19,56 @@ class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+  var homeContentRes;
 
-  void _chose() {
-    if (typeControl.text.toString() == '') {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(title: Text("类型是空")),
-      );
-    } else {
-      _http(typeControl.text.toString()).then((value) => {
-            setState(() {
-              showText = value["data"]["name"];
-            })
-          });
-    }
-  }
-
-  Future _http(String input) async {
-    Response response;
-    var data = {'name': input};
-    response = await Dio().post(
-        "http://test.baixingliangfan.cn/baixing/wxmini/homepageContent",
-        queryParameters: data);
-    print(response);
-    return response.data;
-  }
-
-  final typeControl = TextEditingController();
-  var showText = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("美好人间")),
-      body: Container(
-          child: Column(children: [
-        SwiperDiy(),
-        TopNavigator(),
-        AdBanner(
-            url:
-                "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1603214939353&di=063f765fa38e58dca8c60b7f84b90b57&imgtype=0&src=http%3A%2F%2Fimages.cntrades.com%2F201011%2F17%2F08-40-19-48-391842.gif"),
-      ])),
+      body: FutureBuilder(
+          future: getHomePageContent(),
+          builder: (context, snapshop) {
+            if (snapshop.hasData) {
+              var data = snapshop.data;
+              List<Map> swipter = (data["data"]["slides"] as List).cast();
+              String leaderImg = data["data"]["shopInfo"]["leaderImage"];
+              String leaderPhone = data["data"]["shopInfo"]["leaderPhone"];
+              List<Map> recommend = (data["data"]["recommend"] as List).cast();
+              Map floor1Pic = data["data"]["floor1Pic"];
+              List<Map> floor1 = (data["data"]["floor1"] as List).cast();
+              Map floor2Pic = data["data"]["floor2Pic"];
+              List<Map> floor2 = (data["data"]["floor2"] as List).cast();
+              Map floor3Pic = data["data"]["floor3Pic"];
+              List<Map> floor3 = (data["data"]["floor3"] as List).cast();
+              return SingleChildScrollView(
+                  child: Container(
+                      child: Column(
+                children: [
+                  SwiperDiy(list: swipter),
+                  LeadPhone(
+                    url: leaderImg,
+                    phone: leaderPhone,
+                  ),
+                  Recommend(list: recommend),
+                  FloorTitle(url: floor1Pic),
+                  FloorContent(
+                    floorGoodsList: floor1,
+                  ),
+                  FloorTitle(url: floor2Pic),
+                  FloorContent(
+                    floorGoodsList: floor2,
+                  ),
+                  FloorTitle(url: floor3Pic),
+                  FloorContent(
+                    floorGoodsList: floor3,
+                  ),
+                  HotGoods()
+                ],
+              )));
+            } else {
+              return Center();
+            }
+          }),
     );
   }
 }
