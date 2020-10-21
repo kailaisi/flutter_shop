@@ -12,7 +12,7 @@ class _HotGoodsState extends State<HotGoods> {
   @override
   void initState() {
     super.initState();
-    print(getHotPageContent().toString());
+    request("homePageBelowConten").then((value) => print(value.toString()));
   }
 
   @override
