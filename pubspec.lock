@@ -78,6 +78,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.0"
+  date_format:
+    dependency: "direct main"
+    description:
+      name: date_format
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.9"
   dio:
     dependency: "direct main"
     description:
@@ -104,6 +111,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_cupertino_date_picker:
+    dependency: "direct main"
+    description:
+      name: flutter_cupertino_date_picker
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.26+2"
   flutter_page_indicator:
     dependency: transitive
     description:
@@ -240,8 +254,4 @@ packages:
     version: "2.1.0-nullsafety.3"
 sdks:
   dart: ">=2.10.0-110 <2.11.0"
-<<<<<<< HEAD
-  flutter: ">=1.19.0-4.3.pre <3.0.0"
-=======
-  flutter: ">=1.12.13+hotfix.5 <2.0.0"
->>>>>>> b1cb7c29aa301e20299d18c95a58aaccf0340090
+  flutter: ">=1.19.0-4.3.pre <2.0.0"

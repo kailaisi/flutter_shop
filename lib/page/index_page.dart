@@ -16,7 +16,7 @@ class IndexPage extends StatefulWidget {
 class _IndexPageState extends State<IndexPage> {
   int _currtent = 0;
 
-  List pageList = [
+  List<Widget> pageList = [
     HomePage(),
     CategoryPage(),
     CartPage(),
@@ -36,21 +36,23 @@ class _IndexPageState extends State<IndexPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.grey[50],
-        selectedItemColor: Colors.red,
-        unselectedItemColor: Colors.grey,
-        items: bottomTab,
-        onTap: (value) {
-          setState(() {
-            _currtent = value;
-          });
-        },
-        currentIndex: _currtent,
-      ),
-      body: pageList[_currtent],
-    );
+        backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.grey[50],
+          selectedItemColor: Colors.red,
+          unselectedItemColor: Colors.grey,
+          items: bottomTab,
+          onTap: (value) {
+            setState(() {
+              _currtent = value;
+            });
+          },
+          currentIndex: _currtent,
+        ),
+        body: IndexedStack(
+          index: _currtent,
+          children: pageList,
+        ));
   }
 }

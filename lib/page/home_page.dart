@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_shop/page/home/ab_banner.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+
+import 'home/top_navigator.dart';
+import 'home/top_swiper.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -10,7 +14,11 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   void _chose() {
     if (typeControl.text.toString() == '') {
       showDialog(
@@ -30,7 +38,7 @@ class _HomePageState extends State<HomePage> {
     Response response;
     var data = {'name': input};
     response = await Dio().post(
-        "https://www.fastmock.site/mock/306340adcb47aafb9461fa2841c58155/jd-eshop/dabaojianpost",
+        "http://test.baixingliangfan.cn/baixing/wxmini/homepageContent",
         queryParameters: data);
     print(response);
     return response.data;
@@ -41,67 +49,15 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-<<<<<<< HEAD
       appBar: AppBar(title: Text("美好人间")),
       body: Container(
-          child: Column(
-        children: [SwiperDiy()],
-      )),
-    );
-=======
-        appBar: AppBar(title: Text("美好人间")),
-        body: SingleChildScrollView(
-          child: Container(
-              child: Column(
-            children: [
-              TextField(
-                controller: typeControl,
-                decoration: InputDecoration(
-                  labelText: '类型',
-                  helperText: '请输入需要的类型',
-                ),
-                autofocus: false,
-              ),
-              RaisedButton(
-                onPressed: () {
-                  _chose();
-                },
-                child: Text("确定"),
-              ),
-              Text(
-                "$showText",
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-              )
-            ],
-          )),
-        ));
->>>>>>> b1cb7c29aa301e20299d18c95a58aaccf0340090
-  }
-}
-
-class SwiperDiy extends StatefulWidget {
-  SwiperDiy({Key key}) : super(key: key);
-
-  @override
-  _SwiperDiyState createState() => _SwiperDiyState();
-}
-
-class _SwiperDiyState extends State<SwiperDiy> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: ScreenUtil().setHeight(200),
-      child: Swiper(
-        itemCount: 5,
-        pagination: new SwiperPagination(),
-        loop: true,
-        itemBuilder: (context, index) {
-          return Image.network(
-              "https://t9.baidu.com/it/u=583874135,70653437&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1603790841&t=1af31f2923341c00b44036e7b5ed09f5",
-              fit: BoxFit.cover);
-        },
-      ),
+          child: Column(children: [
+        SwiperDiy(),
+        TopNavigator(),
+        AdBanner(
+            url:
+                "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1603214939353&di=063f765fa38e58dca8c60b7f84b90b57&imgtype=0&src=http%3A%2F%2Fimages.cntrades.com%2F201011%2F17%2F08-40-19-48-391842.gif"),
+      ])),
     );
   }
 }

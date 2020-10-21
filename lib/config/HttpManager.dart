@@ -100,7 +100,7 @@ class HttpManager {
         }
       } else {
         if (status == 105) {
-          errorCallback(Server)
+          errorCallback(HttpError(HttpError.NETWORK_ERROR, "服务器发生错误"));
         }
       }
     } catch (e) {}
