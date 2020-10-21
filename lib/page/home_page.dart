@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_shop/page/home/lead_phone.dart';
+import 'package:flutter_shop/service/service_url.dart';
+import 'package:flutter_shop/service/service_method.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,29 +16,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  void _chose() {
-    if (typeControl.text.toString() == '') {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(title: Text("类型是空")),
-      );
-    } else {
-      _http(typeControl.text.toString()).then((value) => {
-            setState(() {
-              showText = value["data"]["name"];
-            })
-          });
-    }
-  }
-
-  Future _http(String input) async {
-    Response response;
-    var data = {'name': input};
-    response = await Dio().post(
-        "https://www.fastmock.site/mock/306340adcb47aafb9461fa2841c58155/jd-eshop/dabaojianpost",
-        queryParameters: data);
-    print(response);
-    return response.data;
+  var homeContentRes;
+  @override
+  void initState() {
+    super.initState();
+    getHomePageContent().then((value) => {
+          setState(() =>
+              {print(value.toString()), homeContentRes = value.toString()})
+        });
   }
 
   final typeControl = TextEditingController();
@@ -41,65 +31,47 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-<<<<<<< HEAD
       appBar: AppBar(title: Text("美好人间")),
-      body: Container(
-          child: Column(
-        children: [SwiperDiy()],
-      )),
+      body: FutureBuilder(
+          future: getHomePageContent(),
+          builder: (context, snapshop) {
+            if (snapshop.hasData) {
+              var data = snapshop.data;
+              List<Map> swipter = (data["data"]["slides"] as List).cast();
+              String leaderImg = data["data"]["shopInfo"]["leaderImage"];
+              String leaderPhone = data["data"]["shopInfo"]["leaderPhone"];
+              return Container(
+                  child: Column(
+                children: [
+                  SwiperDiy(list: swipter),
+                  LeadPhone(
+                    url: leaderImg,
+                    phone: leaderPhone,
+                  )
+                ],
+              ));
+            } else {
+              return Center();
+            }
+          }),
     );
-=======
-        appBar: AppBar(title: Text("美好人间")),
-        body: SingleChildScrollView(
-          child: Container(
-              child: Column(
-            children: [
-              TextField(
-                controller: typeControl,
-                decoration: InputDecoration(
-                  labelText: '类型',
-                  helperText: '请输入需要的类型',
-                ),
-                autofocus: false,
-              ),
-              RaisedButton(
-                onPressed: () {
-                  _chose();
-                },
-                child: Text("确定"),
-              ),
-              Text(
-                "$showText",
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-              )
-            ],
-          )),
-        ));
->>>>>>> b1cb7c29aa301e20299d18c95a58aaccf0340090
   }
 }
 
-class SwiperDiy extends StatefulWidget {
-  SwiperDiy({Key key}) : super(key: key);
+class SwiperDiy extends StatelessWidget {
+  final List<Map> list;
+  SwiperDiy({this.list});
 
-  @override
-  _SwiperDiyState createState() => _SwiperDiyState();
-}
-
-class _SwiperDiyState extends State<SwiperDiy> {
   @override
   Widget build(BuildContext context) {
     return Container(
       height: ScreenUtil().setHeight(200),
       child: Swiper(
-        itemCount: 5,
+        itemCount: list.length,
         pagination: new SwiperPagination(),
         loop: true,
         itemBuilder: (context, index) {
-          return Image.network(
-              "https://t9.baidu.com/it/u=583874135,70653437&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1603790841&t=1af31f2923341c00b44036e7b5ed09f5",
-              fit: BoxFit.cover);
+          return Image.network("${list[index]['image']}", fit: BoxFit.cover);
         },
       ),
     );

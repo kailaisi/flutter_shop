@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:connectivity/connectivity.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +19,7 @@ class HttpManager {
   Dio _dio;
   factory HttpManager() => _instance;
 
+  //私有构造函数
   HttpManager._internal() {
     if (null == _dio) {
       _dio = new Dio(new BaseOptions(
