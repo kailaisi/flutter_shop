@@ -8,7 +8,8 @@ import 'package:flutter_shop/page/home/hot_good.dart';
 import 'package:flutter_shop/page/home/lead_phone.dart';
 import 'package:flutter_shop/page/home/recomand.dart';
 import 'package:flutter_shop/service/service_method.dart';
-
+import 'package:flutter_shop/ui/loading_footer.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'home/top_swiper.dart';
 
 class HomePage extends StatefulWidget {
@@ -22,11 +23,18 @@ class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin {
   int _page = 1;
   List hotGoos = [];
+  @override
+  void initState() {
+    super.initState();
+    _getHotGoods();
+  }
 
   @override
   bool get wantKeepAlive => true;
   var homeContentRes;
 
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,33 +54,37 @@ class _HomePageState extends State<HomePage>
               List<Map> floor2 = (data["data"]["floor2"] as List).cast();
               Map floor3Pic = data["data"]["floor3Pic"];
               List<Map> floor3 = (data["data"]["floor3"] as List).cast();
-              return SingleChildScrollView(
-                  child: Container(
-                      child: Column(
-                children: [
-                  SwiperDiy(list: swipter),
-                  LeadPhone(
-                    url: leaderImg,
-                    phone: leaderPhone,
-                  ),
-                  Recommend(list: recommend),
-                  FloorTitle(url: floor1Pic),
-                  FloorContent(
-                    floorGoodsList: floor1,
-                  ),
-                  FloorTitle(url: floor2Pic),
-                  FloorContent(
-                    floorGoodsList: floor2,
-                  ),
-                  FloorTitle(url: floor3Pic),
-                  FloorContent(
-                    floorGoodsList: floor3,
-                  ),
-                  hotTitle,
-                  _hotList(),
-                  HotGoods()
-                ],
-              )));
+              return SmartRefresher(
+                  controller: _refreshController,
+                  enablePullDown: true,
+                  enablePullUp: true,
+                  onLoading: _getHotGoods,
+                  footer: LoadingFoot(),
+                  child: ListView(
+                    children: [
+                      SwiperDiy(list: swipter),
+                      TopNavigator(),
+                      LeadPhone(
+                        url: leaderImg,
+                        phone: leaderPhone,
+                      ),
+                      Recommend(list: recommend),
+                      FloorTitle(url: floor1Pic),
+                      FloorContent(
+                        floorGoodsList: floor1,
+                      ),
+                      FloorTitle(url: floor2Pic),
+                      FloorContent(
+                        floorGoodsList: floor2,
+                      ),
+                      FloorTitle(url: floor3Pic),
+                      FloorContent(
+                        floorGoodsList: floor3,
+                      ),
+                      hotTitle,
+                      _hotList(),
+                    ],
+                  ));
             } else {
               return Center();
             }
@@ -80,32 +92,32 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  void _getHotGoods() {
+  void _getHotGoods() async {
     var form = {'page': _page};
     request('homePageBelowConten', formdata: form).then((value) {
-      var data = json.decode(value.toString());
-      List<Map> newGoods = (data['data'] as List).cast();
+      List<Map> newGoods = (value['data'] as List).cast();
+      hotGoos.addAll(newGoods);
+      _page++;
       setState(() {
-        hotGoos.addAll(newGoods);
-        _page++;
+        _refreshController.loadComplete();
       });
     });
   }
 
   Widget hotTitle = Container(
-    margin: EdgeInsets.only(top: 10),
+    margin: EdgeInsets.all(5.0),
     alignment: Alignment.center,
     color: Colors.transparent,
     child: Text("火爆专区"),
   );
 
   Widget _hotList() {
-    if (hotGoos.isEmpty) {
+    if (hotGoos.isNotEmpty) {
       List list = hotGoos.map((e) {
         return InkWell(
           onTap: () {},
           child: Container(
-            width: ScreenUtil().setWidth(360),
+            width: ScreenUtil().setWidth(350),
             color: Colors.white,
             padding: EdgeInsets.all(5.0),
             margin: EdgeInsets.only(bottom: 3.0),
@@ -124,9 +136,12 @@ class _HomePageState extends State<HomePage>
                 ),
                 Row(
                   children: [
-                    Text("￥￥${e['price']}"),
+                    Text("￥${e['price']}"),
+                    Expanded(
+                      child: Text(''), // 中间用Expanded控件
+                    ),
                     Text(
-                      "￥￥${e['mallPrice']}",
+                      "￥${e['mallPrice']}",
                       style: TextStyle(
                           decoration: TextDecoration.lineThrough,
                           color: Colors.grey),
