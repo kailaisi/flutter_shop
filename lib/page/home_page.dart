@@ -63,7 +63,6 @@ class _HomePageState extends State<HomePage>
                   child: ListView(
                     children: [
                       SwiperDiy(list: swipter),
-                      TopNavigator(),
                       LeadPhone(
                         url: leaderImg,
                         phone: leaderPhone,
