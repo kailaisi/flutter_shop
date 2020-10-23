@@ -7,6 +7,7 @@ import 'package:flutter_shop/page/home/floor_title.dart';
 import 'package:flutter_shop/page/home/hot_good.dart';
 import 'package:flutter_shop/page/home/lead_phone.dart';
 import 'package:flutter_shop/page/home/recomand.dart';
+import 'package:flutter_shop/page/home/top_navigator.dart';
 import 'package:flutter_shop/service/service_method.dart';
 import 'package:flutter_shop/ui/loading_footer.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -45,6 +46,7 @@ class _HomePageState extends State<HomePage>
             if (snapshop.hasData) {
               var data = snapshop.data;
               List<Map> swipter = (data["data"]["slides"] as List).cast();
+              List<Map> navigator = (data["data"]["category"] as List).cast();
               String leaderImg = data["data"]["shopInfo"]["leaderImage"];
               String leaderPhone = data["data"]["shopInfo"]["leaderPhone"];
               List<Map> recommend = (data["data"]["recommend"] as List).cast();
@@ -63,6 +65,9 @@ class _HomePageState extends State<HomePage>
                   child: ListView(
                     children: [
                       SwiperDiy(list: swipter),
+                      TopNavigator(
+                        navigatorList: navigator,
+                      ),
                       LeadPhone(
                         url: leaderImg,
                         phone: leaderPhone,

@@ -6,10 +6,13 @@ class TopNavigator extends StatefulWidget {
   TopNavigator({Key key, this.navigatorList}) : super(key: key);
 
   @override
-  _TopNavigatorState createState() => _TopNavigatorState();
+  _TopNavigatorState createState() => _TopNavigatorState(list: navigatorList);
 }
 
 class _TopNavigatorState extends State<TopNavigator> {
+  final List list;
+  _TopNavigatorState({this.list});
+
   Widget _gridItem(BuildContext context, item) {
     return InkWell(
       onTap: () {},
@@ -20,7 +23,7 @@ class _TopNavigatorState extends State<TopNavigator> {
             fit: BoxFit.cover,
             width: ScreenUtil().setWidth(95),
           ),
-          Text(item["name"])
+          Text(item["mallCategoryName"])
         ],
       ),
     );
@@ -28,6 +31,9 @@ class _TopNavigatorState extends State<TopNavigator> {
 
   @override
   Widget build(BuildContext context) {
+    if (list.length > 10) {
+      list.removeRange(10, list.length);
+    }
     return Container(
         height: ScreenUtil().setHeight(320),
         padding: EdgeInsets.all(3.0),
@@ -37,9 +43,9 @@ class _TopNavigatorState extends State<TopNavigator> {
               crossAxisSpacing: 5,
               mainAxisSpacing: 5,
             ),
-            itemCount: 10,
+            itemCount: list.length,
             itemBuilder: (context, index) {
-              return _gridItem(context, {"image": "", "name": "你说"});
+              return _gridItem(context, list[index]);
             }));
   }
 }
