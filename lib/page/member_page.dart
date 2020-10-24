@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_shop/provide/counter.dart';
+import 'package:provide/provide.dart';
 
 class MemberPage extends StatefulWidget {
   MemberPage({Key key}) : super(key: key);
@@ -12,7 +14,12 @@ class _MemberPageState extends State<MemberPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text("会员页面"),
+        child: Container(
+          margin: EdgeInsets.all(200),
+          child: Provide<Counter>(builder: (context, child, counter) {
+            return Text(counter.value.toString());
+          }),
+        ),
       ),
     );
   }
