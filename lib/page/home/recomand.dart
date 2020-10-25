@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_shop/routers/applicaton.dart';
+import 'package:flutter_shop/routers/routes.dart';
 
 //推荐页面
 class Recommend extends StatelessWidget {
@@ -18,9 +20,12 @@ class Recommend extends StatelessWidget {
     );
   }
 
-  Widget _item(item) {
+  Widget _item(context, item) {
     return InkWell(
-        onTap: () {},
+        onTap: () {
+          Application.router.navigateTo(
+              context, "${Routes.detailsPage}?id=${item['goodsId']}");
+        },
         child: Container(
             height: ScreenUtil().setHeight(330),
             width: ScreenUtil().setWidth(240),
@@ -52,11 +57,13 @@ class Recommend extends StatelessWidget {
     return Container(
       height: ScreenUtil().setHeight(330),
       margin: EdgeInsets.all(10),
-      child: ListView(
-          scrollDirection: Axis.horizontal,
-          children: list.map((e) {
-            return _item(e);
-          }).toList()),
+      child: ListView.builder(
+        itemCount: list.length,
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (BuildContext context, int index) {
+          return _item(context, list[index]);
+        },
+      ),
     );
   }
 

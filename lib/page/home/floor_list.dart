@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:flutter_shop/routers/applicaton.dart';
+import 'package:flutter_shop/routers/routes.dart';
 
 class FloorContent extends StatelessWidget {
   final List floorGoodsList;
@@ -9,42 +11,43 @@ class FloorContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Column(
-        children: [_firstRow(), _otherRow()],
+        children: [_firstRow(context), _otherRow(context)],
       ),
     );
   }
 
-  Widget _firstRow() {
+  Widget _firstRow(context) {
     return Container(
         alignment: Alignment.center,
         child: Row(
           children: [
-            _goodItem(floorGoodsList[0]),
+            _goodItem(context, floorGoodsList[0]),
             Column(
               children: [
-                _goodItem(floorGoodsList[1]),
-                _goodItem(floorGoodsList[2]),
+                _goodItem(context, floorGoodsList[1]),
+                _goodItem(context, floorGoodsList[2]),
               ],
             )
           ],
         ));
   }
 
-  Widget _otherRow() {
+  Widget _otherRow(context) {
     return Row(
       children: [
-        _goodItem(floorGoodsList[3]),
-        _goodItem(floorGoodsList[4]),
+        _goodItem(context, floorGoodsList[3]),
+        _goodItem(context, floorGoodsList[4]),
       ],
     );
   }
 
-  Widget _goodItem(item) {
+  Widget _goodItem(context, item) {
     return Container(
       width: ScreenUtil().setWidth(360),
       child: InkWell(
         onTap: () {
-          print("${item['goodsId']}");
+          Application.router.navigateTo(
+              context, "${Routes.detailsPage}?id=${item['goodsId']}");
         },
         child: Image.network(
           item['image'],
