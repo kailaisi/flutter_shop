@@ -7,6 +7,7 @@ import 'package:flutter_shop/provide/category_goods_list.dart';
 import 'package:flutter_shop/provide/child_category.dart';
 import 'package:flutter_shop/service/service_method.dart';
 import 'package:flutter_shop/ui/loading_footer.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provide/provide.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -132,8 +133,18 @@ class _CategoryGoodState extends State<CategoryGood> {
       'categorySubId': Provide.value<ChildCategory>(context).subCateogryId,
       'page': Provide.value<ChildCategory>(context).page,
     };
+    if (!Provide.value<ChildCategory>(context).hasMore) {
+      Fluttertoast.showToast(
+          msg: "已经没有数据了",
+          toastLength: Toast.LENGTH_SHORT,
+          backgroundColor: Colors.pink,
+          textColor: Colors.white,
+          gravity: ToastGravity.CENTER);
+      _refreshController.loadComplete();
+      _refreshController.refreshCompleted();
+      return;
+    }
     request('mallGoods', formdata: form).then((value) {
-      print(value.toString());
       if (value['data'] == null || value['data'] == []) {
         Provide.value<ChildCategory>(context).changeHasMore(false);
       } else {

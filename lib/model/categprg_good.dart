@@ -5,6 +5,9 @@ class CategoryGoodsListModel {
   CategoryGoodsListModel(this.data);
 
   factory CategoryGoodsListModel.fromJson(List json) {
+    if (json == null) {
+      return CategoryGoodsListModel([]);
+    }
     return CategoryGoodsListModel(
         json.map((e) => CategoryGoodsModel.fromJson(e)).toList());
   }

@@ -71,7 +71,6 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
 // 获取做的的分类信息
   void _getCategory() {
     request('category').then((value) {
-      print(value);
       CategoryBigListModel categoryBigListModel =
           CategoryBigListModel.fromJson(value['data']);
       setState(() {
@@ -88,7 +87,6 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
   void _getGoodsList({String categoryId}) {
     var form = {'categoryId': categoryId, 'page': 0, 'categorySubId': ""};
     request('mallGoods', formdata: form).then((value) {
-      print(value.toString());
       //刷新分类右部的数据
       CategoryGoodsListModel list =
           CategoryGoodsListModel.fromJson(value['data']);

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_shop/model/category.dart';
 import 'package:flutter_shop/model/categprg_good.dart';
-import 'package:flutter_shop/provide/category_goods_big_id.dart';
 import 'package:flutter_shop/provide/category_goods_list.dart';
 import 'package:flutter_shop/provide/child_category.dart';
 import 'package:flutter_shop/service/service_method.dart';
@@ -73,7 +72,6 @@ class _RightCategoryNavState extends State<RightCategoryNav> {
       'page': 0
     };
     request('mallGoods', formdata: form).then((value) {
-      print(value.toString());
       //刷新分类右部的数据
       CategoryGoodsListModel list =
           CategoryGoodsListModel.fromJson(value['data']);
