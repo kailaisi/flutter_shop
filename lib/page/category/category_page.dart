@@ -24,10 +24,17 @@ class _CategoryGoodState extends State<CategoryGood> {
 
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+  var _controller = new ScrollController();
   @override
   Widget build(BuildContext context) {
     return Provide<CategoryGoodsListProvide>(builder: (context, child, data) {
       good_list = data.goodList;
+      try {
+        if (Provide.value<ChildCategory>(context).page == 1) {
+          //滚动到0的位置
+          _controller.jumpTo(0);
+        }
+      } catch (e) {}
       if (good_list.isNotEmpty) {
         return Expanded(
             child: Container(
@@ -41,6 +48,7 @@ class _CategoryGoodState extends State<CategoryGood> {
               footer: LoadingFoot(),
               child: ListView.builder(
                   itemCount: good_list.length,
+                  controller: _controller,
                   itemBuilder: (BuildContext context, int index) {
                     return _goodsItem(index);
                   })),
@@ -126,15 +134,15 @@ class _CategoryGoodState extends State<CategoryGood> {
     };
     request('mallGoods', formdata: form).then((value) {
       print(value.toString());
-      CategoryGoodsListModel list =
-          CategoryGoodsListModel.fromJson(value['data']);
-      setState(() {
-        good_list.addAll(list.data);
-      });
-      Provide.value<ChildCategory>(context).page++;
-      if (list.data.isEmpty) {
+      if (value['data'] == null || value['data'] == []) {
         Provide.value<ChildCategory>(context).changeHasMore(false);
       } else {
+        CategoryGoodsListModel list =
+            CategoryGoodsListModel.fromJson(value['data']);
+        setState(() {
+          good_list.addAll(list.data);
+        });
+        Provide.value<ChildCategory>(context).page++;
         Provide.value<ChildCategory>(context).changeHasMore(true);
       }
       _refreshController.loadComplete();
@@ -143,7 +151,7 @@ class _CategoryGoodState extends State<CategoryGood> {
   }
 
   void _refresh() {
-    _page = 0;
+    Provide.value<ChildCategory>(context).page = 1;
     good_list.clear();
     _getGoodsList();
   }

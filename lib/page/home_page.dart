@@ -99,7 +99,8 @@ class _HomePageState extends State<HomePage>
   void _getHotGoods() async {
     var form = {'page': _page};
     request('homePageBelowConten', formdata: form).then((value) {
-      List<Map> newGoods = (value['data'] as List).cast();
+      var data = value;
+      List<Map> newGoods = (data["data"] as List).cast();
       hotGoos.addAll(newGoods);
       _page++;
       setState(() {

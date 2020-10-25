@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_shop/model/category.dart';
@@ -69,6 +71,7 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
 // 获取做的的分类信息
   void _getCategory() {
     request('category').then((value) {
+      print(value);
       CategoryBigListModel categoryBigListModel =
           CategoryBigListModel.fromJson(value['data']);
       setState(() {

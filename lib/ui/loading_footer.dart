@@ -7,6 +7,7 @@ class LoadingFoot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomFooter(
+      loadStyle: LoadStyle.ShowWhenLoading,
       builder: (context, LoadStatus mode) {
         Widget body;
         if (mode == LoadStatus.idle) {
@@ -20,6 +21,7 @@ class LoadingFoot extends StatelessWidget {
         } else {
           body = Text("没有更多数据了!");
         }
+
         return Container(
           height: 55.0,
           color: Colors.grey.shade400,
