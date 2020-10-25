@@ -5,6 +5,7 @@ import 'package:flutter_shop/provide/category_goods_big_id.dart';
 import 'package:flutter_shop/provide/category_goods_list.dart';
 import 'package:flutter_shop/provide/child_category.dart';
 import 'package:flutter_shop/provide/counter.dart';
+import 'package:flutter_shop/provide/details_info.dart';
 import 'package:flutter_shop/routers/applicaton.dart';
 import 'package:provide/provide.dart';
 import 'package:fluro/fluro.dart';
@@ -21,7 +22,8 @@ void main() {
     ..provide(Provider<ChildCategory>.value(childCategory))
     ..provide(Provider<CategoryGoodsListProvide>.value(goodProvide))
     ..provide(Provider<CategoryGoodsListCategoryIdProvide>.value(
-        CategoryGoodsListCategoryIdProvide()));
+        CategoryGoodsListCategoryIdProvide()))
+    ..provide(Provider<DetailsInfoProvide>.value(DetailsInfoProvide()));
   runApp(ProviderNode(
     child: AppComponent(),
     providers: providers,
