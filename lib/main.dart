@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_shop/app_component.dart';
 import 'package:flutter_shop/page/index_page.dart';
 import 'package:flutter_shop/provide/category_goods_big_id.dart';
 import 'package:flutter_shop/provide/category_goods_list.dart';
 import 'package:flutter_shop/provide/child_category.dart';
 import 'package:flutter_shop/provide/counter.dart';
+import 'package:flutter_shop/routers/applicaton.dart';
 import 'package:provide/provide.dart';
+import 'package:fluro/fluro.dart';
+
+import 'routers/routes.dart';
 
 void main() {
   var counter = Counter();
@@ -18,27 +23,7 @@ void main() {
     ..provide(Provider<CategoryGoodsListCategoryIdProvide>.value(
         CategoryGoodsListCategoryIdProvide()));
   runApp(ProviderNode(
-    child: MyApp(),
+    child: AppComponent(),
     providers: providers,
   ));
-}
-
-class MyApp extends StatefulWidget {
-  MyApp({Key key}) : super(key: key);
-
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: MaterialApp(
-        title: "生活+",
-        theme: ThemeData(primaryColor: Colors.pink),
-        home: IndexPage(),
-      ),
-    );
-  }
 }

@@ -37,6 +37,7 @@ dependencies:
   flutter_cupertino_date_picker: ^1.0.26+2
   provide: ^1.0.2
   fluttertoast: ^7.1.1
+  fluro: ^1.7.6
 dev_dependencies:
   flutter_test:
     sdk: flutter

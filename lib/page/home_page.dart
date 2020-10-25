@@ -8,6 +8,8 @@ import 'package:flutter_shop/page/home/hot_good.dart';
 import 'package:flutter_shop/page/home/lead_phone.dart';
 import 'package:flutter_shop/page/home/recomand.dart';
 import 'package:flutter_shop/page/home/top_navigator.dart';
+import 'package:flutter_shop/routers/applicaton.dart';
+import 'package:flutter_shop/routers/routes.dart';
 import 'package:flutter_shop/service/service_method.dart';
 import 'package:flutter_shop/ui/loading_footer.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -120,7 +122,10 @@ class _HomePageState extends State<HomePage>
     if (hotGoos.isNotEmpty) {
       List list = hotGoos.map((e) {
         return InkWell(
-          onTap: () {},
+          onTap: () {
+            Application.router.navigateTo(
+                context, "${Routes.detailsPage}?id=${e['goodsId']}");
+          },
           child: Container(
             width: ScreenUtil().setWidth(350),
             color: Colors.white,
