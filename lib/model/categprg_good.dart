@@ -2,23 +2,11 @@
 class CategoryGoodsListModel {
   List<CategoryGoodsModel> data;
 
-  CategoryGoodsListModel({this.data});
+  CategoryGoodsListModel(this.data);
 
-  CategoryGoodsListModel.fromJson(Map<String, dynamic> json) {
-    if (json['data'] != null) {
-      data = new List<CategoryGoodsModel>();
-      json['data'].forEach((v) {
-        data.add(new CategoryGoodsModel.fromJson(v));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.data != null) {
-      data['data'] = this.data.map((v) => v.toJson()).toList();
-    }
-    return data;
+  factory CategoryGoodsListModel.fromJson(List json) {
+    return CategoryGoodsListModel(
+        json.map((e) => CategoryGoodsModel.fromJson(e)).toList());
   }
 }
 
@@ -38,8 +26,8 @@ class CategoryGoodsModel {
 
   CategoryGoodsModel.fromJson(Map<String, dynamic> json) {
     image = json['image'];
-    oriPrice = json['oriPrice'];
-    presentPrice = json['presentPrice'];
+    oriPrice = double.parse(json['oriPrice'].toString());
+    presentPrice = double.parse(json['presentPrice'].toString());
     goodsName = json['goodsName'];
     goodsId = json['goodsId'];
   }

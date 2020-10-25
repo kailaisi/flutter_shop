@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_shop/model/category.dart';
+import 'package:flutter_shop/model/categprg_good.dart';
+import 'package:flutter_shop/provide/category_goods_list.dart';
 import 'package:flutter_shop/provide/child_category.dart';
 import 'package:flutter_shop/service/service_method.dart';
 import 'package:provide/provide.dart';
@@ -47,7 +49,8 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
           select = index;
         });
         Provide.value<ChildCategory>(context)
-            .setChildCategory(item.bxMallSubDto);
+            .setChildCategory(item.bxMallSubDto, item.mallCategoryId);
+        _getGoodsList(categoryId: item.mallCategoryId);
       },
       child: Container(
         child: Text(item.mallCategoryName,
@@ -63,6 +66,7 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
     );
   }
 
+// 获取做的的分类信息
   void _getCategory() {
     request('category').then((value) {
       CategoryBigListModel categoryBigListModel =
@@ -70,8 +74,22 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
       setState(() {
         list = categoryBigListModel.data;
       });
+      // 修改分类右侧顶部的小类信息
       Provide.value<ChildCategory>(context)
-          .setChildCategory(list[0].bxMallSubDto);
+          .setChildCategory(list[0].bxMallSubDto, list[0].mallCategoryId);
+      //刚进入页面的时候，要加载第一个数据的全部信息
+      _getGoodsList(categoryId: list[0].mallCategoryId);
+    });
+  }
+
+  void _getGoodsList({String categoryId}) {
+    var form = {'categoryId': categoryId, 'page': 0, 'categorySubId': ""};
+    request('mallGoods', formdata: form).then((value) {
+      print(value.toString());
+      //刷新分类右部的数据
+      CategoryGoodsListModel list =
+          CategoryGoodsListModel.fromJson(value['data']);
+      Provide.value<CategoryGoodsListProvide>(context).setGoodsList(list.data);
     });
   }
 }

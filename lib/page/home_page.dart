@@ -140,16 +140,18 @@ class _HomePageState extends State<HomePage>
                 ),
                 Row(
                   children: [
-                    Text("￥${e['price']}"),
                     Expanded(
-                      child: Text(''), // 中间用Expanded控件
-                    ),
-                    Text(
+                        child: Text(
+                      "￥${e['price']}",
+                      textAlign: TextAlign.center,
+                    )),
+                    Expanded(
+                        child: Text(
                       "￥${e['mallPrice']}",
                       style: TextStyle(
                           decoration: TextDecoration.lineThrough,
                           color: Colors.grey),
-                    ),
+                    )),
                   ],
                 )
               ],
