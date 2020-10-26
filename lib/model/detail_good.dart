@@ -3,8 +3,10 @@ class DetailsModel {
   DetailsModel({this.data});
 
   factory DetailsModel.fromJson(Map json) {
-    DetailsModel(
-        data: json != null ? new DetailsGoodsData.fromJson(json) : null);
+    return DetailsModel(
+        data: json != null
+            ? new DetailsGoodsData.fromJson(json)
+            : DetailsGoodsData());
   }
 }
 

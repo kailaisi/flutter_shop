@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_shop/page/detail/detail_explain.dart';
+import 'package:flutter_shop/page/detail/detail_top_area.dart';
+import 'package:flutter_shop/page/detail/detail_web.dart';
 import 'package:flutter_shop/provide/details_info.dart';
 import 'package:provide/provide.dart';
+
+import 'detail/detail_tabbar.dart';
 
 //商品详情
 class DetailPage extends StatelessWidget {
@@ -23,8 +28,13 @@ class DetailPage extends StatelessWidget {
             builder: (context, snapshop) {
               if (snapshop.hasData) {
                 return Container(
-                  child: Column(
-                    children: [],
+                  child: ListView(
+                    children: [
+                      DetailTopArea(),
+                      DetailExplain(),
+                      DetailTabBar(),
+                      DetailWeb(),
+                    ],
                   ),
                 );
               } else {

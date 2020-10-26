@@ -49,6 +49,7 @@ Future request(url, {formdata}) async {
       response = await dio.post(servicePath[url], data: formdata);
     }
     if (response.statusCode == 200) {
+      print(response.data);
       return json.decode(response.data);
     } else {
       throw Exception("后端端口异常");

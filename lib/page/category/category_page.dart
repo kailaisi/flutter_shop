@@ -1,10 +1,13 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_shop/model/categprg_good.dart';
 import 'package:flutter_shop/provide/category_goods_big_id.dart';
 import 'package:flutter_shop/provide/category_goods_list.dart';
 import 'package:flutter_shop/provide/child_category.dart';
+import 'package:flutter_shop/routers/applicaton.dart';
+import 'package:flutter_shop/routers/routes.dart';
 import 'package:flutter_shop/service/service_method.dart';
 import 'package:flutter_shop/ui/loading_footer.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -64,22 +67,27 @@ class _CategoryGoodState extends State<CategoryGood> {
 
   Widget _goodsItem(index) {
     return InkWell(
-      onTap: () {},
-      child: Container(
+        onTap: () {},
+        child: Container(
           padding: EdgeInsets.only(top: 5, bottom: 5),
           decoration: BoxDecoration(
               color: Colors.white,
               border:
                   Border(bottom: BorderSide(width: 1, color: Colors.black12))),
-          child: Row(
-            children: [
-              _goodsImage(index),
-              Column(
-                children: [_goodsName(index), _goodsPrice(index)],
-              )
-            ],
-          )),
-    );
+          child: InkWell(
+              onTap: () {
+                Application.router.navigateTo(context,
+                    "${Routes.detailsPage}?id=${good_list[index].goodsId}");
+              },
+              child: Row(
+                children: [
+                  _goodsImage(index),
+                  Column(
+                    children: [_goodsName(index), _goodsPrice(index)],
+                  )
+                ],
+              )),
+        ));
   }
 
   Widget _goodsImage(index) {
