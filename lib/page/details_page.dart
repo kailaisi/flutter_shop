@@ -27,15 +27,24 @@ class DetailPage extends StatelessWidget {
             future: _getBackInfo(context),
             builder: (context, snapshop) {
               if (snapshop.hasData) {
-                return Container(
-                  child: ListView(
-                    children: [
-                      DetailTopArea(),
-                      DetailExplain(),
-                      DetailTabBar(),
-                      DetailWeb(),
-                    ],
-                  ),
+                return Stack(
+                  children: [
+                    Container(
+                      child: ListView(
+                        children: [
+                          DetailTopArea(),
+                          DetailExplain(),
+                          DetailTabBar(),
+                          DetailWeb(),
+                        ],
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      child: Text("底部购物车"),
+                    )
+                  ],
                 );
               } else {
                 return Container(
