@@ -1,46 +1,72 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_shop/provide/counter.dart';
 import 'package:provide/provide.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class CartPage extends StatelessWidget {
-  const CartPage({Key key}) : super(key: key);
+//购物车
+class CartPage extends StatefulWidget {
+  CartPage({Key key}) : super(key: key);
 
   @override
+  _CartPageState createState() => _CartPageState();
+}
+
+class _CartPageState extends State<CartPage> {
+  List<String> list = [];
+  @override
   Widget build(BuildContext context) {
+    _show();
     return Container(
       child: Column(
-        children: [Number(), MyButton()],
+        children: [
+          Container(
+            height: 500,
+            child: ListView.builder(
+              itemCount: list.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Text("${list[index]}");
+              },
+            ),
+          ),
+          RaisedButton(
+            onPressed: () {
+              _add();
+            },
+            child: Text("增加"),
+          ),
+          RaisedButton(
+            onPressed: () {
+              _clear();
+            },
+            child: Text("清空"),
+          ),
+        ],
       ),
     );
   }
-}
 
-class Number extends StatelessWidget {
-  const Number({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(200),
-      child: Provide<Counter>(builder: (context, child, counter) {
-        return Text(counter.value.toString());
-      }),
-    );
+  _add() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    list.add("你牛逼");
+    sp.setStringList("setInfo", list);
+    sp.commit();
+    _show();
   }
-}
 
-class MyButton extends StatelessWidget {
-  const MyButton({Key key}) : super(key: key);
+  _show() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    if (sp.getStringList("setInfo") != null) {
+      setState(() {
+        list = sp.getStringList("setInfo");
+      });
+    }
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: RaisedButton(
-        onPressed: () {
-          Provide.value<Counter>(context).add();
-        },
-        child: Text("+"),
-      ),
-    );
+  _clear() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    sp.remove("setInfo");
+    setState(() {
+      list = [];
+    });
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_shop/page/detail/detail_bottom.dart';
 import 'package:flutter_shop/page/detail/detail_explain.dart';
 import 'package:flutter_shop/page/detail/detail_top_area.dart';
 import 'package:flutter_shop/page/detail/detail_web.dart';
@@ -42,7 +43,7 @@ class DetailPage extends StatelessWidget {
                     Positioned(
                       bottom: 0,
                       left: 0,
-                      child: Text("底部购物车"),
+                      child: DetailBottom(),
                     )
                   ],
                 );
