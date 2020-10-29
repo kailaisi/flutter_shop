@@ -13,14 +13,16 @@ void main() {
   var childCategory = ChildCategory();
   var goodProvide = CategoryGoodsListProvide();
   var providers = Providers();
+  var goodsList = CategoryGoodsListCategoryIdProvide();
+  var detailinfoProvider = DetailsInfoProvide();
+  var cartProvide = CartProvide();
   providers
     ..provide(Provider<Counter>.value(counter))
     ..provide(Provider<ChildCategory>.value(childCategory))
     ..provide(Provider<CategoryGoodsListProvide>.value(goodProvide))
-    ..provide(Provider<CategoryGoodsListCategoryIdProvide>.value(
-        CategoryGoodsListCategoryIdProvide()))
-    ..provide(Provider<DetailsInfoProvide>.value(DetailsInfoProvide()))
-    ..provide(Provider<CartProvide>.value(CartProvide()));
+    ..provide(Provider<CategoryGoodsListCategoryIdProvide>.value(goodsList))
+    ..provide(Provider<DetailsInfoProvide>.value(detailinfoProvider))
+    ..provide(Provider<CartProvide>.value(cartProvide));
   runApp(ProviderNode(
     child: AppComponent(),
     providers: providers,

@@ -9,7 +9,7 @@ class DetailsInfoProvide extends ChangeNotifier {
   //从后台获取商品详情
   getGoodsInfo(String id) async {
     var formData = {'goodId': id};
-    request("goodsDetail", formdata: formData).then((value) {
+    await request("goodsDetail", formdata: formData).then((value) {
       goodsInfo = DetailsModel.fromJson(value['data']);
       notifyListeners();
     });

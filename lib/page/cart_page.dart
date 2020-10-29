@@ -1,72 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_shop/provide/counter.dart';
+import 'package:flutter_shop/model/card_info.dart';
+import 'package:flutter_shop/page/cart_page/caet_bottom.dart';
+import 'package:flutter_shop/page/cart_page/cart_item.dart';
+import 'package:flutter_shop/provide/cart.dart';
 import 'package:provide/provide.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 //购物车
-class CartPage extends StatefulWidget {
-  CartPage({Key key}) : super(key: key);
+class CartPage extends StatelessWidget {
+  const CartPage({Key key}) : super(key: key);
 
-  @override
-  _CartPageState createState() => _CartPageState();
-}
-
-class _CartPageState extends State<CartPage> {
-  List<String> list = [];
   @override
   Widget build(BuildContext context) {
-    _show();
-    return Container(
-      child: Column(
-        children: [
-          Container(
-            height: 500,
-            child: ListView.builder(
-              itemCount: list.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Text("${list[index]}");
-              },
-            ),
-          ),
-          RaisedButton(
-            onPressed: () {
-              _add();
-            },
-            child: Text("增加"),
-          ),
-          RaisedButton(
-            onPressed: () {
-              _clear();
-            },
-            child: Text("清空"),
-          ),
-        ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("购物车"),
+      ),
+      body: FutureBuilder(
+        future: _getCartInfo(context),
+        builder: (context, snapshot) {
+          List<CartInfoModel> cartList =
+              Provide.value<CartProvide>(context).cartList;
+          if (snapshot.hasData && cartList != null) {
+            return Stack(children: [
+              Provide<CartProvide>(
+                builder: (context, child, value) {
+                  cartList = value.cartList;
+                  return ListView.builder(
+                      itemCount: cartList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        var item = cartList[index];
+                        return CartItem(item);
+                      });
+                },
+              ),
+              Positioned(bottom: 0, left: 0, child: CartBottom())
+            ]);
+          } else {
+            return Text("正在加载....");
+          }
+        },
       ),
     );
   }
 
-  _add() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    list.add("你牛逼");
-    sp.setStringList("setInfo", list);
-    sp.commit();
-    _show();
-  }
-
-  _show() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    if (sp.getStringList("setInfo") != null) {
-      setState(() {
-        list = sp.getStringList("setInfo");
-      });
-    }
-  }
-
-  _clear() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    sp.remove("setInfo");
-    setState(() {
-      list = [];
-    });
+  Future<String> _getCartInfo(BuildContext context) async {
+    await Provide.value<CartProvide>(context).getCartInfo();
+    return "end";
   }
 }
