@@ -9,21 +9,14 @@ class CartProvide with ChangeNotifier {
 
   List<CartInfoModel> cartList = [];
   save(goodsId, goodsName, count, price, images) async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    cartString = sp.getString("cartInfo");
-    print(cartString);
-    var temp = cartString == null ? [] : json.decode(cartString.toString());
-    print(temp);
-    List<Map> tempList = (temp as List).cast();
+    //先获取到list数据
+    await _getSpInfo();
     bool has = false;
-    int index = 0;
-    tempList.forEach((element) {
-      if (element["goodsId"] == goodsId) {
-        element["count"] = element["count"] + 1;
-        cartList[index].count++;
+    cartList.forEach((element) {
+      if (element.goodsId == goodsId) {
+        element.count++;
         has = true;
       }
-      index++;
     });
     if (!has) {
       Map<String, dynamic> map = {
@@ -33,35 +26,59 @@ class CartProvide with ChangeNotifier {
         "price": price,
         "images": images,
       };
-      tempList.add(map);
       cartList.add(CartInfoModel.fromJson(map));
     }
-    cartString = json.encode(tempList).toString();
-    print(cartString);
-    sp.setString("cartInfo", cartString);
+    await _commit();
+    //先获取到list数据
     notifyListeners();
+  }
+
+  //删除品项
+  delete(String goodsId) async {
+    //先获取到list数据
+    await _getSpInfo();
+    int tempId = 0;
+    for (int i = 0; i < cartList.length; i++) {
+      if (cartList[i].goodsId == goodsId) {
+        tempId = i;
+        break;
+      }
+    }
+    cartList.removeAt(tempId);
+    await _commit();
+    await getCartInfo();
   }
 
   remove() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    sp.remove("cartInfo");
-    cartList = [];
-    print("清空购物车");
+    cartList.clear();
+    await _commit();
     notifyListeners();
   }
 
+  //将数据同步到sp
+  _commit() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    cartString = json.encode(cartList).toString();
+    print(cartString);
+    sp.setString("cartInfo", cartString);
+  }
+
   getCartInfo() async {
+    await _getSpInfo();
+    notifyListeners();
+  }
+
+  _getSpInfo() async {
     print("获取购物车数据");
     SharedPreferences sp = await SharedPreferences.getInstance();
     cartString = sp.getString("cartInfo");
-    if (cartString == null) {
-      cartList = [];
-    } else {
+    cartList.clear();
+    if (cartString != null) {
+      cartList.clear();
       List<Map> tempList = (json.decode(cartString.toString()) as List).cast();
       tempList.forEach((element) {
         cartList.add(CartInfoModel.fromJson(element));
       });
-      notifyListeners();
     }
   }
 }

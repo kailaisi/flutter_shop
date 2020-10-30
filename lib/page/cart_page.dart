@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_shop/model/card_info.dart';
-import 'package:flutter_shop/page/cart_page/caet_bottom.dart';
+import 'package:flutter_shop/page/cart_page/cart_bottom.dart';
 import 'package:flutter_shop/page/cart_page/cart_item.dart';
 import 'package:flutter_shop/provide/cart.dart';
 import 'package:provide/provide.dart';

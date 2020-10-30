@@ -25,4 +25,9 @@ class CartInfoModel {
     data['images'] = this.images;
     return data;
   }
+
+  @override
+  String toString() {
+    return super.toString();
+  }
 }

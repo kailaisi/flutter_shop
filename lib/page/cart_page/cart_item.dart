@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_shop/model/card_info.dart';
 import 'package:flutter_shop/page/cart_page/cart_num.dart';
+import 'package:flutter_shop/provide/cart.dart';
+import 'package:provide/provide.dart';
 
 //购物车一条信息
 class CartItem extends StatelessWidget {
@@ -10,7 +14,7 @@ class CartItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(item.toString());
+    print(json.encode(item));
     return Container(
       padding: EdgeInsets.all(5),
       margin: EdgeInsets.all(5),
@@ -22,7 +26,7 @@ class CartItem extends StatelessWidget {
           _checkedBx(),
           _pic(),
           Expanded(child: _cartGoodsName()),
-          _cartGoodsPrice()
+          _cartGoodsPrice(context)
         ],
       ),
     );
@@ -64,7 +68,7 @@ class CartItem extends StatelessWidget {
     );
   }
 
-  Widget _cartGoodsPrice() {
+  Widget _cartGoodsPrice(context) {
     return Container(
       width: ScreenUtil().setWidth(100),
       padding: EdgeInsets.all(5),
@@ -74,7 +78,9 @@ class CartItem extends StatelessWidget {
           Text("${item.price}"),
           Container(
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                Provide.value<CartProvide>(context).delete(item.goodsId);
+              },
               child: Icon(
                 Icons.delete_forever,
                 color: Colors.black26,
