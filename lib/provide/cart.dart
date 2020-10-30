@@ -126,7 +126,6 @@ class CartProvide with ChangeNotifier {
   }
 
   _getSpInfo() async {
-    print("获取购物车数据");
     SharedPreferences sp = await SharedPreferences.getInstance();
     cartString = sp.getString("cartInfo");
     cartList.clear();

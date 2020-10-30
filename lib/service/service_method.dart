@@ -45,11 +45,11 @@ Future request(url, {formdata}) async {
     if (formdata == null) {
       response = await dio.post(servicePath[url]);
     } else {
-      print(formdata.toString());
+      // print(formdata.toString());
       response = await dio.post(servicePath[url], data: formdata);
     }
     if (response.statusCode == 200) {
-      print(response.data);
+      // print(response.data);
       return json.decode(response.data);
     } else {
       throw Exception("后端端口异常");
