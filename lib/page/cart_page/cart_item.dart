@@ -9,7 +9,7 @@ import 'package:provide/provide.dart';
 
 //购物车一条信息
 class CartItem extends StatelessWidget {
-  CartInfoModel item;
+  final CartInfoModel item;
   CartItem(this.item);
 
   @override
@@ -23,7 +23,7 @@ class CartItem extends StatelessWidget {
           border: Border(bottom: BorderSide(width: 1, color: Colors.black12))),
       child: Row(
         children: [
-          _checkedBx(),
+          _checkedBx(context),
           _pic(),
           Expanded(child: _cartGoodsName()),
           _cartGoodsPrice(context)
@@ -33,12 +33,14 @@ class CartItem extends StatelessWidget {
   }
 
   //选中框
-  Widget _checkedBx() {
+  Widget _checkedBx(context) {
     return Container(
       child: Checkbox(
         activeColor: Colors.pink,
-        value: true,
-        onChanged: (val) {},
+        value: item.isSelect,
+        onChanged: (val) {
+          Provide.value<CartProvide>(context).chagneCheckedState(item.goodsId);
+        },
       ),
     );
   }
@@ -63,7 +65,7 @@ class CartItem extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [Text(item.goodsName), CartCount()],
+        children: [Text(item.goodsName), CartCount(item)],
       ),
     );
   }

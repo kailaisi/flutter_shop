@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_shop/model/card_info.dart';
+import 'package:flutter_shop/provide/cart.dart';
+import 'package:provide/provide.dart';
 
 class CartCount extends StatelessWidget {
-  const CartCount({Key key}) : super(key: key);
+  CartInfoModel item;
+  CartCount(this.item);
 
   @override
   Widget build(BuildContext context) {
@@ -12,14 +16,16 @@ class CartCount extends StatelessWidget {
       decoration:
           BoxDecoration(border: Border.all(width: 1, color: Colors.black12)),
       child: Row(
-        children: [_subBtn(), _countNum(), _addBtn()],
+        children: [_subBtn(context), _countNum(), _addBtn(context)],
       ),
     );
   }
 
-  Widget _subBtn() {
+  Widget _subBtn(context) {
     return InkWell(
-        onTap: () {},
+        onTap: () {
+          Provide.value<CartProvide>(context).addOrMinus(item.goodsId, "min");
+        },
         child: Container(
           width: ScreenUtil().setWidth(45),
           height: ScreenUtil().setHeight(45),
@@ -37,13 +43,15 @@ class CartCount extends StatelessWidget {
           width: ScreenUtil().setWidth(70),
           height: ScreenUtil().setHeight(45),
           alignment: Alignment.center,
-          child: Text("5"),
+          child: Text("${item.count}"),
         ));
   }
 
-  Widget _addBtn() {
+  Widget _addBtn(context) {
     return InkWell(
-        onTap: () {},
+        onTap: () {
+          Provide.value<CartProvide>(context).addOrMinus(item.goodsId, "add");
+        },
         child: Container(
           width: ScreenUtil().setWidth(45),
           height: ScreenUtil().setHeight(45),

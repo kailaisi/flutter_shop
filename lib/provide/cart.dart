@@ -6,8 +6,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class CartProvide with ChangeNotifier {
   String cartString = "[]";
-
+  double allGoodsPrice = 0.0;
+  int allGoodsCount = 0;
   List<CartInfoModel> cartList = [];
+  //是否全选
+  bool isAllCheck = false;
+
   save(goodsId, goodsName, count, price, images) async {
     //先获取到list数据
     await _getSpInfo();
@@ -30,7 +34,7 @@ class CartProvide with ChangeNotifier {
     }
     await _commit();
     //先获取到list数据
-    notifyListeners();
+    await getCartInfo();
   }
 
   //删除品项
@@ -49,10 +53,61 @@ class CartProvide with ChangeNotifier {
     await getCartInfo();
   }
 
+  //修改选中状态
+  chagneCheckedState(String goodsId) async {
+    //先获取到list数据
+    await _getSpInfo();
+    int tempId = 0;
+    for (int i = 0; i < cartList.length; i++) {
+      if (cartList[i].goodsId == goodsId) {
+        tempId = i;
+        break;
+      }
+    }
+    cartList[tempId].isSelect = !cartList[tempId].isSelect;
+    await _commit();
+    await getCartInfo();
+  }
+
+  //全选
+  seleAll(bool isCheck) async {
+    //先获取到list数据
+    await _getSpInfo();
+    isAllCheck = isCheck;
+    cartList.forEach((element) {
+      element.isSelect = isCheck;
+    });
+    await _commit();
+    await getCartInfo();
+  }
+
   remove() async {
     cartList.clear();
     await _commit();
-    notifyListeners();
+    await getCartInfo();
+  }
+
+  addOrMinus(String goodsId, String oper) async {
+    //先获取到list数据
+    await _getSpInfo();
+    int tempId = 0;
+    for (int i = 0; i < cartList.length; i++) {
+      if (cartList[i].goodsId == goodsId) {
+        tempId = i;
+        break;
+      }
+    }
+    var temp = cartList[tempId];
+    if (oper == "add") {
+      temp.count++;
+    } else {
+      cartList[tempId].count--;
+      if (temp.count == 0) {
+        cartList.remove(temp);
+      }
+    }
+    await _commit();
+    await getCartInfo();
   }
 
   //将数据同步到sp
@@ -73,11 +128,21 @@ class CartProvide with ChangeNotifier {
     SharedPreferences sp = await SharedPreferences.getInstance();
     cartString = sp.getString("cartInfo");
     cartList.clear();
+    allGoodsCount = 0;
+    allGoodsPrice = 0.0;
+    isAllCheck = true;
     if (cartString != null) {
       cartList.clear();
       List<Map> tempList = (json.decode(cartString.toString()) as List).cast();
       tempList.forEach((element) {
-        cartList.add(CartInfoModel.fromJson(element));
+        CartInfoModel item = CartInfoModel.fromJson(element);
+        cartList.add(item);
+        if (item.isSelect) {
+          allGoodsCount += item.count;
+          allGoodsPrice += item.price * item.count;
+        } else {
+          isAllCheck = false;
+        }
       });
     }
   }
