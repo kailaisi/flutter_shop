@@ -19,6 +19,7 @@ class CartProvide with ChangeNotifier {
     cartList.forEach((element) {
       if (element.goodsId == goodsId) {
         element.count++;
+        element.isSelect = true;
         has = true;
       }
     });
@@ -29,6 +30,7 @@ class CartProvide with ChangeNotifier {
         "count": count,
         "price": price,
         "images": images,
+        "isSelect": true
       };
       cartList.add(CartInfoModel.fromJson(map));
     }
